@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +19,16 @@ public class HTMLLinkParser {
      */
     public StringBuilder HTTPRequest(String Url, StringBuilder Topic) {
         try {
+            //Shows progress for the user.
             System.out.println("Request:" + Topic);
-            Document doc= Jsoup.connect(Url +Topic).get();
+            //Take the document at this address and then strip to prevent links to appear from the head
+            Document doc=        Jsoup.connect(Url +Topic).get();
             StringBuilder body = stripDocument(doc);
+
             System.out.println("Success");
             return body;
         } catch (IOException e) {
+            //Return null if link is a dead end.
             System.err.println("Directory not found:" + e);
             return null;
         }
@@ -98,5 +103,14 @@ public class HTMLLinkParser {
             }
         }
         return ValidLinks;
+    }
+
+    private LinkTreeFileWriter FileWriter = new LinkTreeFileWriter("/home/Output.txt");
+    public void writeLinksToFile(String CurrentRoot, LinkTree CurrentItem){
+        StringBuilder NextNode = new StringBuilder(CurrentRoot + "~");
+        FileWriter.writeToFile(CurrentRoot + CurrentItem.Name);
+        for (LinkTree Item: CurrentItem.ListLinks) {
+            this.writeLinksToFile(NextNode.toString(), Item);
+        }
     }
 }

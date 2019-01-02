@@ -1,5 +1,6 @@
 package com.cabinboy1031.wiki_tree;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +11,7 @@ import java.util.List;
 public class LinkTree {
     public String Name;
     List<LinkTree> ListLinks = new ArrayList<>();
-
-    /**Adds a new node based on String input. If the link is already added to the list, then it isnt added again, making sure every link is unique,
+    /**Adds a new node based on String input. If the link is already added to the list, then it is not added again, making sure every link is unique,
      * @param Name: The topic that connects to the current node.
      */
     public void addLink(String Name){
@@ -63,6 +63,11 @@ public class LinkTree {
         }
     }
 
+    /**Returns true if the link is in the current node
+     *
+     * @param Name
+     * @return boolean
+     */
     public boolean hasLink(String Name){
         for(LinkTree Item: ListLinks){
             if (Item.Name.equals(Name)) {
@@ -73,4 +78,6 @@ public class LinkTree {
         }
         return false;
     }
+
+
 }
