@@ -11,13 +11,15 @@ public class LinkTree {
     public String Name;
     List<LinkTree> ListLinks = new ArrayList<>();
 
-    /**Adds a new node based on String input.
+    /**Adds a new node based on String input. If the link is already added to the list, then it isnt added again, making sure every link is unique,
      * @param Name: The topic that connects to the current node.
      */
     public void addLink(String Name){
-        LinkTree NewNode = new LinkTree();
-        NewNode.Name = Name;
-        this.ListLinks.add(NewNode);
+        if(!this.hasLink(Name)) {
+            LinkTree NewNode = new LinkTree();
+            NewNode.Name = Name;
+            this.ListLinks.add(NewNode);
+        }
     }
 
     /**Displays links in order of their position on the tree. Root, link 1, link 1,1, link 1,2, link 2, link 2,1 etc.
@@ -59,5 +61,16 @@ public class LinkTree {
             e.printStackTrace();
             return new LinkTree();
         }
+    }
+
+    public boolean hasLink(String Name){
+        for(LinkTree Item: ListLinks){
+            if (Item.Name.equals(Name)) {
+                return true;
+            } else {
+                continue;
+            }
+        }
+        return false;
     }
 }
