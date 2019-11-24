@@ -43,7 +43,7 @@
       <!-- jsoup HTML parser library @ https://jsoup.org/ -->
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
-      <version>1.11.3</version>
+      <version>1.12.1</version>
     </dependency>
   </dependencies>
 
@@ -91,7 +91,23 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
-      </plugins>
+     <plugin>
+
+      <!-- Building an executable jar -->
+
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <version>3.1.0</version>
+      <configuration>
+        <archive>
+          <manifest>
+            <!-- give full qualified name of your main class-->
+            <mainClass>com.cabinboy1031.wiki_tree.App</mainClass>
+          </manifest>
+        </archive>
+      </configuration>
+    </plugin>     </plugins>
     </pluginManagement>
+
   </build>
 </project>

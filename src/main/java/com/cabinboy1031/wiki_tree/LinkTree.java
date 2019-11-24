@@ -1,10 +1,11 @@
 package com.cabinboy1031.wiki_tree;
 
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**LinkTree works basically as a backbone structure to the whole program to show relationships to each other.
+/**LinkTree works as a backbone structure to the whole program to show relationships to each other.
  * @author Cabinboy1031
  *
  */
@@ -13,13 +14,16 @@ public class LinkTree {
     List<LinkTree> ListLinks = new ArrayList<>();
     /**Adds a new node based on String input. If the link is already added to the list, then it is not added again, making sure every link is unique,
      * @param Name: The topic that connects to the current node.
+     * @return LinkRef: A reference to the added link. Can be null if not added.
      */
-    public void addLink(String Name){
+    public LinkTree addLink(String Name){
         if(!this.hasLink(Name)) {
             LinkTree NewNode = new LinkTree();
             NewNode.Name = Name;
             this.ListLinks.add(NewNode);
+            return NewNode;
         }
+        return null;
     }
 
     /**Displays links in order of their position on the tree. Root, link 1, link 1,1, link 1,2, link 2, link 2,1 etc.

@@ -59,7 +59,7 @@ public class HTMLLinkParser {
      * @param ListLinks: What the collectLinks() function feeds into.
      * @return Finalised list of links to feed into the LinkTree class.
      */
-    public List<StringBuilder> validateLinks(String Topic, List<String> ListLinks){
+    public List<StringBuilder> validateLinks(String Topic, List<String> ListLinks, List<StringBuilder> SeenLinks){
         Pattern[] InvalidLinks = {
                 Pattern.compile("^/wiki/Wikipedia:*"),
                 Pattern.compile("^/wiki/File:*"),
@@ -69,12 +69,13 @@ public class HTMLLinkParser {
                 Pattern.compile("^/wiki/Portal*"),
                 Pattern.compile("^/wiki/Category:"),
                 Pattern.compile("^/wiki/Talk:*"),
+                Pattern.compile("^/wiki/Template:"),
                 Pattern.compile("^/wiki/"+ Topic)
         };
 
         Pattern ValidLink = Pattern.compile("^/wiki/*");
-        Matcher isValid;
-        Matcher notValid;
+        Matcher isValid; // FIXME make less vague names.
+        Matcher notValid;// isValid is made for valid links regex while notValid is for invalid links.
 
         List<StringBuilder> ValidLinks = new ArrayList<>();
         //Loop iterating over the links
@@ -83,8 +84,8 @@ public class HTMLLinkParser {
             if (isValid.find()) {
                 //Loop iterating over the regex list
                 boolean LoopBroke = false;
-                for (Pattern Link : InvalidLinks) {
-                    notValid = Link.matcher(Item);
+                for (Pattern invalidLink : InvalidLinks) {
+                    notValid = invalidLink.matcher(Item);
 
                     if (!notValid.find()) {
                         continue;
@@ -96,8 +97,9 @@ public class HTMLLinkParser {
 
                 if (!LoopBroke) {
                     StringBuilder CurrentLink = new StringBuilder(Item);
-                    if(!ValidLinks.contains(CurrentLink)) {
-                        ValidLinks.add(CurrentLink.delete(0, 6));
+                    if(!ValidLinks.contains(CurrentLink) || !SeenLinks.contains(CurrentLink)) {
+                        SeenLinks.add(CurrentLink.delete(0,6));
+                        ValidLinks.add(CurrentLink);
                     }
                 }
             }
@@ -105,7 +107,7 @@ public class HTMLLinkParser {
         return ValidLinks;
     }
 
-    private LinkTreeFileWriter FileWriter = new LinkTreeFileWriter("/home/Output.txt");
+    private LinkTreeFileWriter FileWriter = new LinkTreeFileWriter("/home/ian/Output.txt");
     public void writeLinksToFile(String CurrentRoot, LinkTree CurrentItem){
         StringBuilder NextNode = new StringBuilder(CurrentRoot + "~");
         FileWriter.writeToFile(CurrentRoot + CurrentItem.Name);
